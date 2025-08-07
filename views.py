@@ -56,6 +56,7 @@ class AddToDo(Resource):
         db.session.commit()
         return "Your task is added succcessfully!"
     
+# this only lets view tasks to the users who are authenticated and are proven owners of tasks
 class ViewToDo(Resource):
     @user_auth
     def post(self,email):
@@ -68,6 +69,8 @@ class ViewToDo(Resource):
             result.append(item.task)
         return {'Your Tasks:':result}
 
+# this edit todo first authenticates by header token and then passes to route function
+# and again this route function checks that does that task belong to that user only then allows to update
 class EditToDo(Resource):
     @user_auth
     def post(self,email): 
