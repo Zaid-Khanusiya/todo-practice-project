@@ -34,18 +34,18 @@ class Login(Resource):
             if token_check:
                 token_check.token = token
                 db.session.commit()
-                return {"email": email, "token": token}
+                return {"Your Email:": email, "Your Token:": token}
             else:
                 new_token = Token(email=email, token=token)
                 db.session.add(new_token)
                 db.session.commit()
-                return {"email": email, "token": token}
+                return {"Your Email:": email, "Your Token:": token}
         else:
             return "User or pasword is invalid", 400
         
 class AddToDo(Resource):
-    @user_auth
-    def post(self,email):
+    @user_auth # this is a python decorator which will authenticate user with email & token...
+    def post(self,email): # this email field will come from(return) the decorator function defined in utils.py
         data = request.get_json()
         task = data.get('task')
         user = User.query.filter_by(email=email).first()
@@ -55,3 +55,15 @@ class AddToDo(Resource):
         db.session.add(new_task)
         db.session.commit()
         return "Your task is added succcessfully!"
+    
+class ViewToDo(Resource):
+    @user_auth
+    def post(self,email):
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return {'error':'User Not Found!'}, 400
+        user_todos = ToDo.query.filter_by(user_id=user.user_id).all()
+        result = []
+        for item in user_todos:
+            result.append(item.task)
+        return {'Your Tasks:':result}

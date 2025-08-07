@@ -4,6 +4,7 @@ from app import myapp,api # importing myapp registers the url idk for some reaso
 api.add_resource(SignUp, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(AddToDo, '/addtodo')
+api.add_resource(ViewToDo, '/tasks')
 
 
 # api.add_resource(Home, '/')
