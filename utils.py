@@ -15,8 +15,8 @@ def user_auth(f):
         # print(f"Header token: {token} (type: {type(token)})")
         # print(f"DB token: {email_token.token} (type: {type(email_token.token)})")
         if token == str(email_token.token):
-            print("Done Returning Values!")
-            print(f"/{email}/")
+            # print("Done Returning Values!")
+            # print(f"/{email}/")
             return f(self, email)
         return {"error": "Invalid Token!"}, 401
     return decorated

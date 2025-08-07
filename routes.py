@@ -1,10 +1,11 @@
 from views import *
-from app import myapp,api # importing myapp registers the url idk for some reason
+from app import myapp,api # importing myapp even with no use registers the url idk for some reason
 
 api.add_resource(SignUp, '/signup')
 api.add_resource(Login, '/login')
-api.add_resource(AddToDo, '/addtodo')
+api.add_resource(AddToDo, '/addtask')
 api.add_resource(ViewToDo, '/tasks')
+api.add_resource(EditToDo, '/edittask')
 
 
 # api.add_resource(Home, '/')

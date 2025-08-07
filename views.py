@@ -67,3 +67,22 @@ class ViewToDo(Resource):
         for item in user_todos:
             result.append(item.task)
         return {'Your Tasks:':result}
+
+class EditToDo(Resource):
+    @user_auth
+    def post(self,email): 
+        # here we dont need email but since the decorator function returns it we have to atleast take it to not cause errors
+        data = request.get_json()
+        todo_id = data.get('task_id')
+        updated_task = data.get('updated_task')
+        task = ToDo.query.filter_by(todo_id=todo_id).first()
+        if not task:
+            return {'error':'Task Not Found!'},400
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return {'error':'User Not Found!'},400
+        if user.user_id != task.user_id:
+            return {'error':'The task is not registered under you!'},400
+        task.task = updated_task
+        db.session.commit()
+        return "Your Task Has Been Updated Successfully!"
