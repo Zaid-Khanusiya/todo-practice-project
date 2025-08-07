@@ -71,7 +71,6 @@ class ViewToDo(Resource):
 class EditToDo(Resource):
     @user_auth
     def post(self,email): 
-        # here we dont need email but since the decorator function returns it we have to atleast take it to not cause errors
         data = request.get_json()
         todo_id = data.get('task_id')
         updated_task = data.get('updated_task')
