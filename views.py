@@ -4,6 +4,43 @@ from models import *
 from flask_restful import Resource
 from utils import *
 
+
+class AdminAllUserView(Resource):
+    def get(self):
+        users = User.query.all()
+        tokens = Token.query.all()
+        token_email_pair = {}
+        for token in tokens:
+            token_email_pair[token.email] = token.token
+        print(token_email_pair)
+        return_response = []
+        for user in users:
+            needed_token = token_email_pair.get(user.email)
+            return_response.append({
+                'email': user.email,
+                'password': user.password,
+                'token': needed_token
+            })
+        return return_response
+    
+class AdminAllTodos(Resource):
+    def get(self):
+        todos = ToDo.query.all()
+        users = User.query.all()
+        user_email_pair = {}
+        for user in users:
+            user_email_pair[user.user_id] = user.email
+        return_response = []
+        for todo in todos:
+            needed_user = user_email_pair.get(todo.user_id)
+            return_response.append({
+                'todo_id' : todo.todo_id,
+                'user_email' : needed_user,
+                'task' : todo.task
+            })
+        return return_response
+
+
 class SignUp(Resource):
     def post(self):
         data = request.get_json()
@@ -88,3 +125,20 @@ class EditToDo(Resource):
         task.task = updated_task
         db.session.commit()
         return "Your Task Has Been Updated Successfully!"
+    
+class DeleteToDo(Resource):
+    @user_auth
+    def delete(self,email):
+        data = request.get_json()
+        todo_id = data.get('task_id')
+        task = ToDo.query.filter_by(todo_id=todo_id).first()
+        if not task:
+            return {'error':'Task Not Found!'},400
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return {'error':'User Not Found!'},400
+        if user.user_id != task.user_id:
+            return {'error':'The task is not registered under you!'},400
+        db.session.delete(task)
+        db.session.commit()
+        return "Your Task Has Been Deleted Successfully!"

@@ -6,6 +6,9 @@ api.add_resource(Login, '/login')
 api.add_resource(AddToDo, '/addtask')
 api.add_resource(ViewToDo, '/tasks')
 api.add_resource(EditToDo, '/edittask')
+api.add_resource(AdminAllUserView, '/allusers')
+api.add_resource(AdminAllTodos, '/alltodos')
+api.add_resource(DeleteToDo, '/deletetodo')
 
 
 # api.add_resource(Home, '/')

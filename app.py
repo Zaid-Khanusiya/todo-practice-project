@@ -6,7 +6,6 @@ api = Api(myapp)
 
 from routes import *
 
-
 # Run the app on localhost 5000 port
 if __name__ == '__main__':
     myapp.run(port=5000, debug=True)
