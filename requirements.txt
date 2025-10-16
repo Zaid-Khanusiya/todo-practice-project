@@ -1,0 +1,5 @@
+flask
+Flask-RESTful
+flask_sqlalchemy
+psycopg2-binary
+dotenv
